@@ -13,7 +13,9 @@ const Register: React.FC = () => {
     formState: { isLoading, errors },
     handleSubmit,
   } = useForm<FormState>();
-  const onSubmit: SubmitHandler<FormState> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<FormState> = (data) => {
+    console.log(data);
+  };
   return (
     <div className="bg-white/80 w-screen h-screen flex justify-center items-center flex-col">
       <div className="flex flex-col items-center mb-5">
@@ -34,7 +36,9 @@ const Register: React.FC = () => {
             {...register("name", { required: "name must required" })}
             className="border-2  rounded-lg p-2 placeholder:text-sm placeholder:text-black/20 shadow-md"
           />
-          {errors.name && <p>{errors.name?.message}</p>}
+          {errors.name && (
+            <p className="text-sm text-red-400">{errors.name?.message}</p>
+          )}
         </label>
         <label className="font-bold text-base flex flex-col w-full text-black/60">
           Your email
@@ -44,7 +48,9 @@ const Register: React.FC = () => {
             {...register("email", { required: "email must required" })}
             className="border-2  rounded-lg p-2 placeholder:text-sm placeholder:text-black/20 shadow-md"
           />
-          {errors.email && <p>{errors.email?.message}</p>}
+          {errors.email && (
+            <p className="text-sm text-red-400">{errors.email?.message}</p>
+          )}
         </label>
         <label className="font-bold text-base flex flex-col w-full text-black/60">
           password
@@ -57,7 +63,9 @@ const Register: React.FC = () => {
             })}
             className="border-2  rounded-lg p-2 placeholder:text-sm placeholder:text-black/20 shadow-md"
           />
-          {errors.password && <p>{errors.password?.message}</p>}
+          {errors.password && (
+            <p className="text-sm text-red-400">{errors.password?.message}</p>
+          )}
         </label>
         <label className="font-bold text-base flex flex-col w-full text-black/60">
           conform password
@@ -72,13 +80,18 @@ const Register: React.FC = () => {
             })}
             className="border-2  rounded-lg p-2 placeholder:text-sm placeholder:text-black/20 shadow-md"
           />
-          {errors.conformPassword && <p>{errors.conformPassword?.message}</p>}
+          {errors.conformPassword && (
+            <p className="text-sm text-red-400">
+              {errors.conformPassword?.message}
+            </p>
+          )}
         </label>
         <button
           type="submit"
           className="w-full rounded-lg bg-blue-500 text-white shadow-md p-2"
+          disabled={isLoading}
         >
-          Register
+          {isLoading ? "Loding..." : "Register"}
         </button>
       </form>
     </div>
