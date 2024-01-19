@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler, useWatch } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 
 type FormState = {
   name: string;
