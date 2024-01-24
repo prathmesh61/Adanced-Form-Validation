@@ -28,3 +28,5 @@ const checkUserValidate = async (
     return res.status(404).json("somthing went wrong validate function");
   }
 };
+
+export default checkUserValidate;
