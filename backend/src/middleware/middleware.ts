@@ -18,6 +18,7 @@ const checkUserValidate = async (
           .json({ message: "Unauthorized - Invalid token" });
       }
       // Attach the user object to the request for further use in the route
+      // @ts-ignore
       req.user = user;
 
       // Continue with the request
