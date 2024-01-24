@@ -7,6 +7,10 @@ const userSchema = z.object({
   email: z.string().email(),
   password: z.string().min(5, "password is required"),
 });
+const loginSchema = z.object({
+  email: z.string().email(),
+  password: z.string().min(5, "password is required"),
+});
 export const registerUser = async (req: Request, res: Response) => {
   try {
     const body = req.body;
@@ -16,13 +20,13 @@ export const registerUser = async (req: Request, res: Response) => {
       return res.json(validation.error.format());
     }
     // check user already register
-    const userExcist = await prisma.user.findFirst({
+    const userExist = await prisma.user.findFirst({
       where: {
         email: validation.data.email,
       },
     });
-    if (userExcist) {
-      return res.status(400).json("User already excist login");
+    if (userExist) {
+      return res.status(400).json("User already Exist login");
     }
 
     // register user
@@ -42,5 +46,46 @@ export const registerUser = async (req: Request, res: Response) => {
   } catch (error) {
     console.log(error);
     return res.status(500).json("somthing went wrong in register.");
+  }
+};
+
+export const loginUser = async (req: Request, res: Response) => {
+  try {
+    const body = req.body;
+    const validation = loginSchema.safeParse(body);
+    if (!validation.success) {
+      return res.json(validation.error.format());
+    }
+    // check user already register or not registered
+    const userExist = await prisma.user.findFirst({
+      where: {
+        email: validation.data.email,
+      },
+    });
+    if (!userExist) {
+      return res.status(400).json("User not register");
+    }
+
+    // check password match
+    const password = validation.data.password === userExist.password;
+    if (!password) {
+      return res.status(400).json("User unauthorized check login credentials");
+    }
+    // token created
+    const token = jwt.sign(
+      { userID: userExist.email },
+      process.env.JWT_SECRET!,
+      {
+        expiresIn: "1hr",
+      }
+    );
+
+    return res
+      .cookie("access_token", token)
+      .status(201)
+      .json("User login successful");
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json("somthing went wrong in login.");
   }
 };
