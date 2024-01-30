@@ -76,10 +76,7 @@ export const loginUser = async (req: Request, res: Response) => {
       expiresIn: "1hr",
     });
 
-    return res
-      .cookie("access_token", token)
-      .status(201)
-      .json("User login successful");
+    return res.cookie("access_token", token).status(201).json(userExist);
   } catch (error) {
     console.log(error);
     return res.status(500).json("somthing went wrong in login.");

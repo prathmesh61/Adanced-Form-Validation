@@ -1,18 +1,36 @@
+import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useMyContext } from "../context/myContext";
+import { useNavigate } from "react-router-dom";
 
 type FormState = {
   email: string;
   password: string;
 };
-
+const API_URL = "http://localhost:8081";
 const Login = () => {
+  const { setContextData } = useMyContext();
+  const navigate = useNavigate();
   const {
     register,
     formState: { isLoading, errors },
     handleSubmit,
   } = useForm<FormState>();
-  const onSubmit: SubmitHandler<FormState> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FormState> = async (data) => {
+    try {
+      const { data: loginInfo } = await axios.post(
+        `${API_URL}/api/login`,
+        { ...data },
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(loginInfo);
+      setContextData(loginInfo);
+      navigate("/");
+    } catch (error) {
+      console.log(error, "Login Function error.");
+    }
   };
   return (
     <div className="bg-white/80 w-screen h-screen flex justify-center items-center flex-col">
@@ -45,7 +63,6 @@ const Login = () => {
             placeholder="Enter your password.."
             {...register("password", {
               required: "password must required",
-              minLength: 8,
             })}
             className="border-2  rounded-lg p-2 placeholder:text-sm placeholder:text-black/20 shadow-md"
           />

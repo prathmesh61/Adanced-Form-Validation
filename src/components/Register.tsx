@@ -1,4 +1,7 @@
+import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { useMyContext } from "../context/myContext";
 
 type FormState = {
   name: string;
@@ -6,15 +9,33 @@ type FormState = {
   password: string;
   conformPassword: string;
 };
+const API_URL = "http://localhost:8081";
+
 const Register: React.FC = () => {
+  const navigate = useNavigate();
+  const { setContextData } = useMyContext();
+
   const {
     register,
     watch,
     formState: { isLoading, errors },
     handleSubmit,
   } = useForm<FormState>();
-  const onSubmit: SubmitHandler<FormState> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FormState> = async (data) => {
+    try {
+      const { data: registerInfo } = await axios.post(
+        `${API_URL}/api/register`,
+        { ...data },
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(registerInfo);
+      setContextData(registerInfo);
+      navigate("/");
+    } catch (error) {
+      console.log(error, "Login Function error.");
+    }
   };
   return (
     <div className="bg-white/80 w-screen h-screen flex justify-center items-center flex-col">
