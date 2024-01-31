@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMyContext } from "../context/myContext";
 
 type FormState = {
@@ -80,7 +80,6 @@ const Register: React.FC = () => {
             placeholder="Enter your password.."
             {...register("password", {
               required: "password must required",
-              minLength: 8,
             })}
             className="border-2  rounded-lg p-2 placeholder:text-sm placeholder:text-black/20 shadow-md"
           />
@@ -95,9 +94,8 @@ const Register: React.FC = () => {
             placeholder="conform password.."
             {...register("conformPassword", {
               required: true,
-              minLength: 8,
               validate: (value) =>
-                value === watch("password") || "Passwords do not match",
+                value !== watch("password") && "Passwords do not match",
             })}
             className="border-2  rounded-lg p-2 placeholder:text-sm placeholder:text-black/20 shadow-md"
           />
@@ -115,6 +113,12 @@ const Register: React.FC = () => {
           {isLoading ? "Loding..." : "Register"}
         </button>
       </form>
+      <p className="text-left mt-5 flex gap-1">
+        Already have account,
+        <Link to={"/login"} className="cursor-pointer underline font-medium">
+          login
+        </Link>
+      </p>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useMyContext } from "../context/myContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 type FormState = {
   email: string;
@@ -79,6 +79,12 @@ const Login = () => {
           {isLoading ? "Loding..." : "Login"}
         </button>
       </form>
+      <p className="text-left mt-5 flex gap-1">
+        Don't have an account,
+        <Link to={"/register"} className="cursor-pointer underline font-medium">
+          Register
+        </Link>
+      </p>
     </div>
   );
 };
