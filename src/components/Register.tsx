@@ -25,7 +25,11 @@ const Register: React.FC = () => {
     try {
       const { data: registerInfo } = await axios.post(
         `${API_URL}/api/register`,
-        { ...data },
+        {
+          email: data.email,
+          name: data.name,
+          password: data.password,
+        },
         {
           withCredentials: true,
         }
@@ -95,7 +99,7 @@ const Register: React.FC = () => {
             {...register("conformPassword", {
               required: true,
               validate: (value) =>
-                value !== watch("password") && "Passwords do not match",
+                value === watch("password") || "Passwords do not match",
             })}
             className="border-2  rounded-lg p-2 placeholder:text-sm placeholder:text-black/20 shadow-md"
           />
